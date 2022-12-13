@@ -1,0 +1,43 @@
+<h1>Show Car</h1>
+
+<ul>
+
+  <li>
+    <strong>Company name:</strong>
+    <%= @car.company_name %>
+  </li>
+
+  <li>
+    <strong>Model:</strong>
+    <%= @car.model %>
+  </li>
+
+  <li>
+    <strong>Year:</strong>
+    <%= @car.year %>
+  </li>
+
+  <li>
+    <strong>Engine fuel type:</strong>
+    <%= @car.engine_fuel_type %>
+  </li>
+
+  <li>
+    <strong>Engine hp:</strong>
+    <%= @car.engine_hp %>
+  </li>
+
+  <li>
+    <strong>Transmission type:</strong>
+    <%= @car.transmission_type %>
+  </li>
+
+  <li>
+    <strong>Driven wheel:</strong>
+    <%= @car.driven_wheel %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: Routes.car_path(@conn, :edit, @car) %></span> |
+<span><%= link "Back", to: Routes.car_path(@conn, :index) %></span>
