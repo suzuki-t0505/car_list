@@ -1,5 +1,9 @@
 <h1>Listing Cars</h1>
 
+<div>
+  <%= button "export", to: Routes.car_path(@conn, :create_csv), method: :post%>
+</div>
+
 <table>
   <thead>
     <tr>

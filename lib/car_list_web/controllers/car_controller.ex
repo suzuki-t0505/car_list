@@ -92,4 +92,19 @@ defmodule CarListWeb.CarController do
   defp fields do
     [:company_name, :model, :year, :engine_fuel_type, :engine_hp, :transmission_type, :driven_wheel]
   end
+
+  def create_csv(conn, _params) do
+    send_download(conn, {:binary, create_csv_data()}, filename: "export_cars.csv")
+  end
+
+  defp create_csv_data() do
+    Cars.list_cars()
+    |> Enum.map(fn car ->
+      car
+      |> Map.from_struct()
+      |> Map.delete(:__meta__)
+    end)
+    |> CSV.encode(headers: true)
+    |> Enum.join()
+  end
 end
