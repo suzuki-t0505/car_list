@@ -59,4 +59,37 @@ defmodule CarListWeb.CarController do
     |> put_flash(:info, "Car deleted successfully.")
     |> redirect(to: Routes.car_path(conn, :index))
   end
+
+  def csv_import(conn, _params) do
+    render(conn, "csv_import_form.html", error_message: nil, index: nil, file_name: nil)
+  end
+
+  def create_cars(conn, %{"csv_file" => file_data}) do
+    csv_data =
+      file_data.path
+      |> File.stream!()
+      |> CSV.decode!(headers: fields())
+      |> Enum.map(& &1)
+      |> tl()
+      |> Cars.create_cars()
+
+    case csv_data do
+      {:ok, _map} ->
+        conn
+        |> put_flash(:info, "Cars created successfully.")
+        |> redirect(to: Routes.car_path(conn, :index))
+
+      {:error, "car_" <> index, changeset, _map} ->
+
+        IO.inspect(changeset)
+        error_message =
+          Enum.map(changeset.errors, fn {_key, {message, _details}} -> message end)
+          |> IO.inspect()
+        render(conn, "csv_import_form.html", error_message: error_message, index: String.to_integer(index), file_name: file_data.filename)
+    end
+  end
+
+  defp fields do
+    [:company_name, :model, :year, :engine_fuel_type, :engine_hp, :transmission_type, :driven_wheel]
+  end
 end

@@ -1,0 +1,18 @@
+<h1>Import csv</h1>
+
+<%= if @error_message do %>
+  <div class="alert alert-danger">
+    <p><%= "#{@index + 1} line of #{@file_name}：" %></p>
+    <%= for message <- @error_message do %>
+      <p><%= message %></p>
+    <% end %>
+  </div>
+<% end %>
+
+<.form let={f} for={@conn} action={Routes.car_path(@conn, :create_cars)} multipart={true}>
+  <%= file_input f, :csv_file %>
+
+  <button type="submit">save</button>
+</.form>
+
+<span><%= link "Back", to: Routes.car_path(@conn, :index) %></span>

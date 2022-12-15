@@ -20,6 +20,8 @@ defmodule CarListWeb.Router do
     get "/", PageController, :index
 
     resources "/cars", CarController
+    get "/cars/new/csv_import", CarController, :csv_import
+    post "/cars/csv_import", CarController, :create_cars
   end
 
   # Other scopes may use custom stacks.

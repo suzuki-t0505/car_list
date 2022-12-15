@@ -7,6 +7,7 @@ defmodule CarList.Cars do
   alias CarList.Repo
 
   alias CarList.Cars.Car
+  alias Ecto.Multi
 
   @doc """
   Returns the list of cars.
@@ -100,5 +101,14 @@ defmodule CarList.Cars do
   """
   def change_car(%Car{} = car, attrs \\ %{}) do
     Car.changeset(car, attrs)
+  end
+
+  def create_cars(car_list) do
+    car_list
+    |> Enum.with_index(1)
+    |> Enum.reduce(Multi.new(), fn {params, index}, multi ->
+      Multi.insert(multi, "car_#{index}", Car.changeset(%Car{}, params))
+    end)
+    |> Repo.transaction()
   end
 end
